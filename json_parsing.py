@@ -1,8 +1,10 @@
 import requests
 
-response = requests.post("https://playground.learnqa.ru/api/check_type", data={"param1": "value1"})
-print(response.text)
+response = requests.post("https://playground.learnqa.ru/api/get_301", allow_redirects=True)
+first_redirect = response.history[0]
+second_redirect = response
 
-response = requests.get("https://playground.learnqa.ru/api/check_type", params={"param1": "value1"})
-print(response.text)
+print(first_redirect.url)
+print(second_redirect.url)
+
 
