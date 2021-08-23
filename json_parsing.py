@@ -1,13 +1,5 @@
-import json
+import requests
 
-string_as_json_format = '{"answer": "Hello, User"}'
-obj = json.loads(string_as_json_format)
-# print(obj['answer'])
-
-key = "answer2"
-
-if key in obj:
-    print(obj[key])
-else:
-    print(f"Key {key} is not presented in JSON")
+response = requests.post("https://playground.learnqa.ru/api/check_type", data={"param1": "value1"})
+print(response.text)
 
