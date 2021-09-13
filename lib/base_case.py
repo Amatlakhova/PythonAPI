@@ -34,3 +34,15 @@ class BaseCase:
             'lastName': 'learnqa',
             'email': email
         }
+
+    def prepare_invalid_data(self, key):
+        data = {
+            'password': '1234',
+            'username': 'learnqa',
+            'firstName': 'learnqa',
+            'lastName': 'learnqa',
+            'email': 'vinkotov@example.com'
+        }
+        invalid = dict(data)
+        del invalid[key]
+        return invalid
