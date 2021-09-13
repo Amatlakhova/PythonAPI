@@ -31,3 +31,31 @@ class TestUserGet(BaseCase):
         expected_fields = ["username", "email", "firstName", "lastName"]
         Assertions.assert_json_has_keys(response2, expected_fields)
 
+
+    def test_hack_user_data(self):
+        # Register the hacker
+        hacker = self.prepare_registration_data()
+
+        response = MyRequests.post("/user/", data=hacker)
+        Assertions.assert_code_status(response, 200)
+
+        # Auth the hacker
+        data = {
+            'email': hacker['email'],
+            'password': hacker['password']
+        }
+
+        response1 = MyRequests.post("/user/login", data=data)
+
+        auth_sid = self.get_cookie(response1, "auth_sid")
+        token = self.get_header(response1, "x-csrf-token")
+
+        # Try to get data of other user being logged in as the hacker
+        response2 = MyRequests.get(
+            "/user/2",
+            headers={"x-csrf-token": token},
+            cookies={"auth_sid": auth_sid}
+            )
+        expected_fields = ["email", "firstName", "lastName"]
+        Assertions.assert_json_has_not_keys(response2, expected_fields)
+
