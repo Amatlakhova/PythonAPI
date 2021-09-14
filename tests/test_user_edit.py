@@ -1,9 +1,16 @@
+import allure
+
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 from lib.my_requests import MyRequests
 
 
+@allure.epic("Editing tests")
 class TestUserEdit(BaseCase):
+    @allure.description("This test edits data of a registered user")
+    @allure.tag("Positive Test Case")
+    @allure.severity(allure.severity_level.CRITICAL)
+    @allure.suite("Smoke Test")
     def test_edit_just_created_user(self):
 
         # REGISTER
@@ -55,7 +62,10 @@ class TestUserEdit(BaseCase):
             "Wrong name of the user after edit"
         )
 
-
+    @allure.description("This test tries to edit not authorized user by id, but not allowed")
+    @allure.tag("Negative Test Case")
+    @allure.severity(allure.severity_level.MINOR)
+    @allure.suite("Regression")
     def test_edit_not_auth_user(self):
 
         # Register
@@ -77,6 +87,10 @@ class TestUserEdit(BaseCase):
 
         Assertions.assert_code_status(response2, 400)
 
+    @allure.description("This test checks that it is impossible to edit user's data being logged in as other user")
+    @allure.tag("Negative Test Case")
+    @allure.severity(allure.severity_level.NORMAL)
+    @allure.suite("Regression")
     def test_edit_other_user_data(self):
         # Register user 1
         user1 = self.prepare_registration_data()
@@ -114,7 +128,10 @@ class TestUserEdit(BaseCase):
 
         Assertions.assert_code_status(response3, 400)
 
-
+    @allure.description("This test tries to edit user's email to invalid, but not succeed")
+    @allure.tag("Negative Test Case")
+    @allure.severity(allure.severity_level.NORMAL)
+    @allure.suite("Smoke Test")
     def test_edit_user_email_to_invalid(self):
         # Register user
         user = self.prepare_registration_data()
@@ -146,6 +163,10 @@ class TestUserEdit(BaseCase):
 
         Assertions.assert_code_status(response2, 400)
 
+    @allure.description("This test tries to edit user's firstname to invalid, but not succeed")
+    @allure.tag("Negative Test Case")
+    @allure.severity(allure.severity_level.NORMAL)
+    @allure.suite("Smoke Test")
     def test_edit_user_firstname_to_invalid(self):
         # Register user
         user = self.prepare_registration_data()

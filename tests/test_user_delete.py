@@ -1,9 +1,16 @@
+import allure
+
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 from lib.my_requests import MyRequests
 
 
+@allure.epic("Deletion tests")
 class TestUserDelete(BaseCase):
+    @allure.description("This test tries to delete user by id, but not allowed")
+    @allure.tag("Negative Test Case")
+    @allure.severity(allure.severity_level.NORMAL)
+    @allure.suite("Regression")
     def test_delete_user_by_id(self):
         data = {
             'email': 'vinkotov@example.com',
@@ -23,6 +30,10 @@ class TestUserDelete(BaseCase):
 
         Assertions.assert_code_status(response1, 400)
 
+    @allure.description("This test successfully deletes user by id")
+    @allure.tag("Positive Test Case")
+    @allure.severity(allure.severity_level.CRITICAL)
+    @allure.suite("Smoke Test")
     def test_delete_user_successfully(self):
         # Register user
         data = self.prepare_registration_data()
@@ -61,6 +72,10 @@ class TestUserDelete(BaseCase):
 
         Assertions.assert_code_status(response3, 404)
 
+    @allure.description("This test checks that it is impossible to delete a user being logged in as other user")
+    @allure.tag("Negative Test Case")
+    @allure.severity(allure.severity_level.CRITICAL)
+    @allure.suite("Regression")
     def test_delete_other_user(self):
         # Register user 1
         user1 = self.prepare_registration_data()

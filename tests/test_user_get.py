@@ -1,9 +1,16 @@
+import allure
+
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 from lib.my_requests import MyRequests
 
 
+@allure.epic("Get data tests")
 class TestUserGet(BaseCase):
+    @allure.description("This test checks that it is impossible to get data of not authorized user, except from firstname")
+    @allure.tag("Negative Test Case")
+    @allure.severity(allure.severity_level.CRITICAL)
+    @allure.suite("Regression")
     def test_get_user_details_not_auth(self):
         response = MyRequests.get("/user/2")
         Assertions.assert_json_has_key(response, "username")
@@ -11,6 +18,10 @@ class TestUserGet(BaseCase):
         Assertions.assert_json_has_not_key(response, "firstName")
         Assertions.assert_json_has_not_key(response, "lastName")
 
+    @allure.description("This test checks that it is possible to get data of authorized user")
+    @allure.tag("Positive Test Case")
+    @allure.severity(allure.severity_level.NORMAL)
+    @allure.suite("Regression")
     def test_get_user_details_auth_as_same_user(self):
         data = {
             'email': 'vinkotov@example.com',
@@ -31,7 +42,10 @@ class TestUserGet(BaseCase):
         expected_fields = ["username", "email", "firstName", "lastName"]
         Assertions.assert_json_has_keys(response2, expected_fields)
 
-
+    @allure.description("This test checks that it is impossible to get user's data being logged in as other user")
+    @allure.tag("Negative Test Case")
+    @allure.severity(allure.severity_level.CRITICAL)
+    @allure.suite("Regression")
     def test_hack_user_data(self):
         # Register the hacker
         hacker = self.prepare_registration_data()
